@@ -1,0 +1,20 @@
+:root {
+  /* Design tokens */
+  --color-deep: #102f50;
+  --color-ocean: #194b78;
+  --color-blue: #3678b4;
+  --color-sky: #82b8e6;
+  --color-cloud: #eaf4fc;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-deep);
+  color: var(--color-cloud);
+}

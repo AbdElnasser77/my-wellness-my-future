@@ -1,0 +1,45 @@
+.hero {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--color-deep);
+}
+
+.hero__scene {
+  position: absolute;
+  inset: 0;
+}
+
+/* Both layers use identical sizing so the video and image stay aligned */
+.hero__layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  user-select: none;
+  pointer-events: none;
+}
+
+/*
+ * The cut (two masks, intersected) — transparent = the video shows through:
+ *   1. linear  – image fully visible down to 76%, fades out by 84% → water
+ *   2. ellipse – soft hole over the low mist bank on the left
+ * The video's falling leaves stay above ~68%, so both holes keep them hidden.
+ * (The video is only 720p, so detailed areas like the clouds stay on the sharp image.)
+ */
+.hero__image {
+  --cut-start: 76%;
+  --cut-end: 84%;
+  mask-image:
+    linear-gradient(to bottom, #000 var(--cut-start), transparent var(--cut-end)),
+    radial-gradient(ellipse 22% 7% at 24% 77%, transparent 35%, #000 100%);
+  mask-composite: intersect;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__video { display: none; }
+  .hero__image { mask-image: none; }
+}
