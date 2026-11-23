@@ -1,0 +1,328 @@
+/* =========================================================
+   Membership plans — dark section, three glass cards,
+   Premium highlighted, monthly / yearly switch
+   ========================================================= */
+
+.plans {
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  color: var(--color-cloud);
+  background:
+    radial-gradient(ellipse 60% 45% at 50% 0%, rgb(54 120 180 / 0.35), transparent 70%),
+    radial-gradient(ellipse 40% 40% at 100% 100%, rgb(130 184 230 / 0.12), transparent 70%),
+    linear-gradient(180deg, var(--color-deep), var(--color-night));
+}
+
+.plans__inner {
+  max-width: 1320px;
+  margin-inline: auto;
+  padding: clamp(80px, 13vh, 144px) clamp(20px, 4vw, 72px);
+}
+
+/* ---------- Heading ---------- */
+
+.plans__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: clamp(40px, 6vh, 64px);
+}
+
+.plans__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 clamp(12px, 2vh, 20px);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-sky);
+}
+
+.plans__eyebrow span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-sky);
+}
+
+.plans__title {
+  max-width: 16em;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 4.4vw, 4.5rem);
+  font-weight: 500;
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  color: #fff;
+}
+
+.plans__title em {
+  color: var(--color-sky);
+}
+
+.plans__lead {
+  max-width: 34em;
+  margin: clamp(14px, 2.4vh, 22px) 0 0;
+  font-size: clamp(1rem, 1.15vw, 1.1rem);
+  line-height: 1.7;
+  text-wrap: balance;
+  color: rgb(234 244 252 / 0.72);
+}
+
+/* ---------- Monthly / yearly switch ---------- */
+
+.plans__switch {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: clamp(24px, 4vh, 36px);
+  padding: 5px;
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.06);
+}
+
+.plans__switch-thumb {
+  position: absolute;
+  inset: 5px auto 5px 5px;
+  width: calc(50% - 5px);
+  border-radius: 999px;
+  background: var(--color-blue);
+  box-shadow: 0 8px 20px rgb(54 120 180 / 0.4);
+  transition: translate 0.45s var(--ease-out);
+}
+
+.plans__switch-thumb[data-billing='yearly'] {
+  translate: 100% 0;
+}
+
+.plans__switch-option {
+  position: relative;
+  z-index: 1;
+  min-width: 120px;
+  padding: 11px 22px;
+  border: 0;
+  border-radius: 999px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: rgb(234 244 252 / 0.7);
+  background: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.plans__switch-option[aria-pressed='true'] {
+  color: #fff;
+}
+
+/* ---------- Cards ---------- */
+
+.plans__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: center;
+  gap: clamp(14px, 1.6vw, 24px);
+}
+
+.plans__card {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(26px, 2.6vw, 40px);
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.08), rgb(255 255 255 / 0.03));
+  box-shadow: 0 24px 50px rgb(0 0 0 / 0.25);
+  /* `translate` so hover never fights the GSAP reveal (transform) */
+  transition: translate 0.45s var(--ease-out), border-color 0.3s ease;
+}
+
+.plans__card:hover {
+  translate: 0 -6px;
+  border-color: rgb(130 184 230 / 0.4);
+}
+
+/* Premium: light card, a little taller */
+.plans__card--featured {
+  padding-block: clamp(34px, 3.4vw, 52px);
+  color: var(--color-deep);
+  border-color: transparent;
+  background: linear-gradient(180deg, #fff, var(--color-cloud));
+  box-shadow: 0 30px 70px rgb(0 0 0 / 0.35), 0 0 0 1px rgb(130 184 230 / 0.4);
+}
+
+.plans__card--featured:hover {
+  border-color: transparent;
+}
+
+.plans__name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 2vw, 2rem);
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.plans__ideal {
+  margin: 8px 0 0;
+  font-size: 0.9rem;
+  color: rgb(234 244 252 / 0.65);
+}
+
+.plans__card--featured .plans__ideal {
+  color: rgb(16 47 80 / 0.65);
+}
+
+.plans__price {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: clamp(22px, 3vh, 32px) 0 clamp(20px, 3vh, 28px);
+  padding-top: clamp(20px, 3vh, 28px);
+  border-top: 1px solid rgb(255 255 255 / 0.12);
+  animation: plans-price 0.5s var(--ease-out);
+}
+
+.plans__card--featured .plans__price {
+  border-top-color: rgb(16 47 80 / 0.12);
+}
+
+@keyframes plans-price {
+  from { opacity: 0; translate: 0 8px; }
+}
+
+.plans__amount {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 4vw, 4rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  /* Cormorant's default old-style figures make "100" read like "IOO" */
+  font-variant-numeric: lining-nums;
+}
+
+.plans__currency {
+  font-size: 0.92rem;
+  font-weight: 600;
+  opacity: 0.65;
+}
+
+/* CTA: same single-pill style as the "Know us more" button */
+.plans__cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 54px;
+  padding: 0 5px 0 24px;
+  border: 1px solid rgb(255 255 255 / 0.2);
+  border-radius: 999px;
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: #fff;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.plans__cta-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: var(--color-deep);
+  background: #fff;
+}
+
+.plans__cta-icon svg {
+  transition: transform 0.35s var(--ease-out);
+}
+
+.plans__cta:hover {
+  border-color: var(--color-blue);
+  background: var(--color-blue);
+}
+
+.plans__cta:hover .plans__cta-icon svg {
+  transform: translateX(3px);
+}
+
+.plans__card--featured .plans__cta {
+  border-color: transparent;
+  background: var(--color-blue);
+  box-shadow: 0 10px 24px rgb(54 120 180 / 0.3);
+}
+
+.plans__card--featured .plans__cta:hover {
+  background: var(--color-ocean);
+}
+
+.plans__card--featured .plans__cta-icon {
+  color: var(--color-blue);
+}
+
+.plans__secure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 12px 0 0;
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+
+.plans__benefits-title {
+  margin: clamp(24px, 3.4vh, 34px) 0 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.plans__benefits {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.plans__benefits li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 0.94rem;
+  line-height: 1.5;
+}
+
+.plans__check {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+  border-radius: 50%;
+  color: var(--color-sky);
+  background: rgb(130 184 230 / 0.16);
+}
+
+.plans__card--featured .plans__check {
+  color: #fff;
+  background: var(--color-blue);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 960px) {
+  .plans__grid {
+    grid-template-columns: minmax(0, 520px);
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plans__price { animation: none; }
+  .plans__switch-thumb { transition: none; }
+}

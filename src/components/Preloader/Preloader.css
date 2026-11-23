@@ -1,0 +1,99 @@
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 45%, rgb(25 75 120 / 0.55), transparent 70%),
+    var(--color-night);
+  transition: opacity 1s var(--ease-out), visibility 1s;
+}
+
+/* soft light pulsing behind the logo */
+.preloader__halo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(70vw, 520px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(130 184 230 / 0.28), rgb(54 120 180 / 0.1) 45%, transparent 70%);
+  transform: translate(-50%, -58%);
+  animation: preloader-halo 3.2s ease-in-out infinite;
+}
+
+.preloader__mark {
+  position: relative;
+  animation: preloader-in 1.1s var(--ease-out) both;
+}
+
+.preloader__logo {
+  display: block;
+  width: clamp(96px, 14vw, 140px);
+  height: auto;
+  animation: preloader-breathe 3.2s ease-in-out infinite;
+}
+
+.preloader__name {
+  position: relative;
+  margin: 28px 0 32px;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.2vw, 1.9rem);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--color-cloud);
+  animation: preloader-in 1.1s var(--ease-out) 0.2s both;
+}
+
+/* hairline progress bar */
+.preloader__bar {
+  position: relative;
+  width: 160px;
+  height: 1px;
+  overflow: hidden;
+  background: rgb(234 244 252 / 0.15);
+  animation: preloader-in 1.1s var(--ease-out) 0.35s both;
+}
+
+.preloader__bar span {
+  position: absolute;
+  inset: 0;
+  transform-origin: left;
+  background: linear-gradient(90deg, var(--color-blue), var(--color-sky), var(--color-cloud));
+  box-shadow: 0 0 10px var(--color-sky);
+  transition: transform 0.8s var(--ease-out);
+}
+
+/* ---------- Exit ---------- */
+
+.preloader--out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.preloader--out .preloader__mark {
+  transform: scale(1.08);
+  filter: blur(4px);
+  transition: transform 1s var(--ease-out), filter 1s var(--ease-out);
+}
+
+/* ---------- Keyframes ---------- */
+
+@keyframes preloader-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes preloader-breathe {
+  0%, 100% { transform: scale(1);    filter: drop-shadow(0 0 12px rgb(130 184 230 / 0.35)); }
+  50%      { transform: scale(1.03); filter: drop-shadow(0 0 28px rgb(130 184 230 / 0.7)); }
+}
+
+@keyframes preloader-halo {
+  0%, 100% { opacity: 0.6; transform: translate(-50%, -58%) scale(0.92); }
+  50%      { opacity: 1;   transform: translate(-50%, -58%) scale(1.05); }
+}
