@@ -201,21 +201,27 @@
 }
 
 /* =========================================================
-   Tall photo — big rounded top-right and bottom-left corners
+   Right column: photo (big rounded top-right / bottom-left corners)
+   with the "Our Goals" card under it
    ========================================================= */
 
-.about__visual {
-  position: relative;
+.about__side {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 1.6vh, 20px);
   width: 100%;
   max-width: 890px; /* never wider than this */
   justify-self: end;
+  min-height: 0;
+}
+
+.about__visual {
+  position: relative;
+  flex: 1;
   margin: 0;
-  height: 100%;
-  min-height: 560px;
+  min-height: 360px;
   border-radius: 12px 96px 12px 96px;
   overflow: hidden;
-  /* the scroll animation widens it via clip-path (see About.jsx) */
-  will-change: clip-path;
 }
 
 .about__photo {
@@ -225,7 +231,55 @@
   height: 100%;
   object-fit: cover;
   object-position: 53% 30%;
-  will-change: transform;
+  /* slight zoom keeps the cut-off hands at the photo's edges out of frame */
+  transform: scale(1.12);
+}
+
+.about__goals {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: clamp(16px, 2.4vw, 40px);
+  padding: clamp(18px, 2.6vh, 30px) clamp(20px, 2.2vw, 36px);
+  border-radius: 20px;
+  color: #fff;
+  background:
+    radial-gradient(ellipse 60% 90% at 100% 0%, rgb(130 184 230 / 0.28), transparent 70%),
+    var(--color-blue);
+  box-shadow: 0 18px 40px rgb(54 120 180 / 0.25);
+}
+
+.about__goals-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, min(2.2vw, 4vh), 2.3rem);
+  font-weight: 500;
+  line-height: 1.05;
+}
+
+.about__goals-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(8px, 1.3vh, 14px) clamp(16px, 2vw, 32px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.about__goals-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: clamp(0.86rem, min(0.95vw, 1.8vh), 1rem);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--color-cloud);
+}
+
+.about__goals-list svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--color-sky);
 }
 
 /* =========================================================
@@ -250,6 +304,7 @@
   }
 
   .about__visual { min-height: 0; }
+  .about__side { height: 100%; }
 
   .about__eyebrow { margin-bottom: clamp(10px, 2vh, 24px); }
   .about__title { font-size: clamp(2.2rem, min(4.4vw, 7vh), 4.75rem); }
@@ -273,9 +328,13 @@
 
 @media (max-width: 1000px) {
   .about__inner { grid-template-columns: 1fr; }
-  .about__visual { order: -1; min-height: 0; aspect-ratio: 4 / 3; border-radius: 12px 64px 12px 64px; }
+  /* stack: photo first, then text + cards, then goals */
+  .about__side { display: contents; }
+  .about__visual { order: -1; flex: none; min-height: 0; aspect-ratio: 4 / 3; border-radius: 12px 64px 12px 64px; }
 }
 
 @media (max-width: 640px) {
   .about__cards { grid-template-columns: 1fr; }
+  .about__goals { grid-template-columns: 1fr; }
+  .about__goals-list { grid-template-columns: 1fr; }
 }

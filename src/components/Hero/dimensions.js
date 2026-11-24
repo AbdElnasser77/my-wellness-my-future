@@ -12,19 +12,17 @@ import {
 } from 'lucide-react'
 
 /*
- * The 10 wellness dimensions around the tree.
- * x / y are percentages of the scene artwork (the tree trunk is at x ≈ 53%),
- * so the labels stay attached to the tree on every screen size.
+ * The 10 wellness dimensions, shown in the carousel under the tree.
  */
 export const DIMENSIONS = [
-  { name: 'Occupational', icon: Briefcase, x: 35, y: 21 },
-  { name: 'Quantum', icon: Atom, x: 66, y: 17 },
-  { name: 'Financial', icon: Coins, x: 33, y: 36 },
-  { name: 'Emotional', icon: Heart, x: 76, y: 29 },
-  { name: 'Mental', icon: Brain, x: 38, y: 49 },
-  { name: 'Social', icon: Users, x: 74, y: 45 },
-  { name: 'Cultural', icon: Landmark, x: 43, y: 61 },
-  { name: 'Physical', icon: Activity, x: 70, y: 58 },
-  { name: 'Intellectual', icon: BookOpen, x: 39, y: 73 },
-  { name: 'Environmental', icon: Sprout, x: 67, y: 72 },
+  { name: 'Occupational', icon: Briefcase },
+  { name: 'Quantum', icon: Atom },
+  { name: 'Financial', icon: Coins },
+  { name: 'Emotional', icon: Heart },
+  { name: 'Mental', icon: Brain },
+  { name: 'Social', icon: Users },
+  { name: 'Cultural', icon: Landmark },
+  { name: 'Physical', icon: Activity },
+  { name: 'Intellectual', icon: BookOpen },
+  { name: 'Environmental', icon: Sprout },
 ]

@@ -4,13 +4,15 @@ import Navbar from './components/Navbar/Navbar.jsx'
 import Hero from './components/Hero/Hero.jsx'
 import About from './components/About/About.jsx'
 import Services from './components/Services/Services.jsx'
+import Testimonials from './components/Testimonials/Testimonials.jsx'
 import Membership from './components/Membership/Membership.jsx'
+import Faq from './components/Faq/Faq.jsx'
 import useHeroAssets from './hooks/useHeroAssets.js'
 import useSmoothScroll from './hooks/useSmoothScroll.js'
 import useHeroTransition from './hooks/useHeroTransition.js'
 
 function App() {
-  const { progress, ready, markVideoReady, markImageReady } = useHeroAssets()
+  const { progress, ready, markVideoReady } = useHeroAssets()
   useSmoothScroll(ready)
   useHeroTransition(ready)
 
@@ -28,10 +30,12 @@ function App() {
       <div className="app" data-ready={ready}>
         <Navbar />
         <main>
-          <Hero onVideoReady={markVideoReady} onImageReady={markImageReady} />
+          <Hero onVideoReady={markVideoReady} />
           <About />
           <Services />
+          <Testimonials />
           <Membership />
+          <Faq />
         </main>
       </div>
     </>

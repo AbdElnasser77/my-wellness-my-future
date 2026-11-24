@@ -1,90 +1,35 @@
-import { useEffect, useRef } from 'react'
-import { ArrowRight, ArrowUpRight, BookOpen, Eye, Target } from 'lucide-react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { STEPS } from './aboutContent.js'
+import { ArrowRight, ArrowUpRight, BookOpen, Check, Eye, Target } from 'lucide-react'
+import { GOALS, STEPS } from './aboutContent.js'
 import './About.css'
-
-gsap.registerPlugin(ScrollTrigger)
 
 const [WHO, MISSION, VISION, STORY] = STEPS
 
 /*
- * "Who We Are" — left: eyebrow, headline, intro, buttons and a bento of
- * Mission / Vision / Story cards. Right: tall photo with asymmetric corners.
- * Elements fade up once as they scroll into view.
+ * "Who We Are" — left: eyebrow, headline, intro, button and the Mission /
+ * Vision / Story cards. Right: photo with asymmetric corners and the
+ * "Our Goals" card under it. No scroll animations.
  */
 function About() {
-  const ref = useRef(null)
-
-  useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const ctx = gsap.context(() => {
-      gsap.from('[data-reveal]', {
-        y: 40,
-        opacity: 0,
-        duration: 1,
-        ease: 'power3.out',
-        stagger: 0.08,
-        clearProps: 'transform,opacity',
-        scrollTrigger: { trigger: ref.current, start: 'top 70%', once: true },
-      })
-
-      // photo: widens from a narrow slice to full width while it scrolls
-      // into view, and the picture inside drifts/zooms (parallax)
-      gsap.fromTo(
-        '.about__visual',
-        { clipPath: 'inset(6% 0% 6% 38% round 12px 96px 12px 96px)' },
-        {
-          clipPath: 'inset(0% 0% 0% 0% round 12px 96px 12px 96px)',
-          ease: 'none',
-          scrollTrigger: {
-            trigger: '.about__visual',
-            start: 'top 95%',
-            end: 'top 25%',
-            scrub: true,
-          },
-        },
-      )
-      gsap.fromTo(
-        '.about__photo',
-        { yPercent: -5, scale: 1.24 },
-        {
-          yPercent: 5,
-          scale: 1.12, // never below 1.12, so the cut-off hands at the edges stay hidden
-          ease: 'none',
-          scrollTrigger: {
-            trigger: '.about__visual',
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: true,
-          },
-        },
-      )
-    }, ref)
-    return () => ctx.revert()
-  }, [])
-
   return (
-    <section className="about" id="about" ref={ref} aria-labelledby="about-title">
+    <section className="about" id="about" aria-labelledby="about-title">
 
       <div className="about__inner">
         {/* ---------- Left column ---------- */}
         <div className="about__text">
-          <p className="about__eyebrow" data-reveal>
+          <p className="about__eyebrow">
             <span aria-hidden="true" />
             {WHO.label}
           </p>
 
-          <h2 className="about__title" id="about-title" data-reveal>
+          <h2 className="about__title" id="about-title">
             {WHO.title[0]} <em>{WHO.title[1]}</em>
           </h2>
 
-          <p className="about__lead" data-reveal>
+          <p className="about__lead">
             {WHO.text}
           </p>
 
-          <div className="about__actions" data-reveal>
+          <div className="about__actions">
             <a href="#contact" className="about__button">
               Know us more
               <span className="about__button-icon" aria-hidden="true">
@@ -95,7 +40,7 @@ function About() {
 
           {/* ---------- Bento cards ---------- */}
           <div className="about__cards">
-            <article className="about__card about__card--ocean" data-reveal>
+            <article className="about__card about__card--ocean">
               <span className="about__card-icon">
                 <Target size={22} strokeWidth={1.5} aria-hidden="true" />
               </span>
@@ -106,7 +51,7 @@ function About() {
               </p>
             </article>
 
-            <article className="about__card about__card--sky" data-reveal>
+            <article className="about__card about__card--sky">
               <span className="about__card-icon">
                 <Eye size={22} strokeWidth={1.5} aria-hidden="true" />
               </span>
@@ -117,7 +62,7 @@ function About() {
               </p>
             </article>
 
-            <article className="about__card about__card--deep" data-reveal>
+            <article className="about__card about__card--deep">
               <span className="about__card-icon">
                 <BookOpen size={22} strokeWidth={1.5} aria-hidden="true" />
               </span>
@@ -134,17 +79,31 @@ function About() {
           </div>
         </div>
 
-        {/* ---------- Right column: tall photo ---------- */}
-        <figure className="about__visual">
-          <img
-            className="about__photo"
-            src="/about/team.webp"
-            alt="Emirati team members talking together in a bright office"
-            width="890"
-            height="720"
-            decoding="async"
-          />
-        </figure>
+        {/* ---------- Right column: photo + goals ---------- */}
+        <div className="about__side">
+          <figure className="about__visual">
+            <img
+              className="about__photo"
+              src="/about/team.webp"
+              alt="Emirati team members talking together in a bright office"
+              width="890"
+              height="720"
+              decoding="async"
+            />
+          </figure>
+
+          <div className="about__goals">
+            <h3 className="about__goals-title">Our Goals</h3>
+            <ul className="about__goals-list">
+              {GOALS.map((goal) => (
+                <li key={goal}>
+                  <Check size={18} strokeWidth={2.25} aria-hidden="true" />
+                  {goal}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
   )

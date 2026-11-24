@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { ArrowDown, Maximize, Minimize, Mouse } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { ArrowDown, ChevronLeft, ChevronRight, Maximize, Minimize, Mouse } from 'lucide-react'
 import { DIMENSIONS } from './dimensions.js'
 import './Hero.css'
 
@@ -8,57 +8,37 @@ import './Hero.css'
  * and darkens as section 2 slides over (see hooks/useHeroTransition).
  *
  * Layer stack (back → front):
- *   scene   – 16:9 box holding the video, the masked image and the dimension
- *             labels, so labels stay pinned to the tree on any screen size
+ *   scene   – 16:9 box holding the background video
  *   shade   – gradients that keep the text readable
  *   content – headline, copy, buttons and small controls
  */
-function Hero({ onVideoReady, onImageReady }) {
-  // the image only cuts its water/mist holes once the video can play,
-  // so a slow connection still shows the full still scene
-  const [waterReady, setWaterReady] = useState(false)
-  const handleVideoReady = () => {
-    setWaterReady(true)
-    onVideoReady?.()
-  }
-  // decode before reporting, so the image paints in one go
-  const handleImageLoad = (e) => {
-    e.currentTarget.decode().then(onImageReady, onImageReady)
-  }
+function Hero({ onVideoReady }) {
+  // people who ask for reduced motion get the still first frame
+  const reduceMotion =
+    typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   return (
     <section className="hero" id="home">
       <div className="hero__stage">
-        <div className={`hero__scene ${waterReady ? 'hero__scene--water' : ''}`}>
-          {/* only the bottom strip of the scene (water + mist) is video —
-              the still image covers everything above it */}
+        <div className="hero__scene">
+          {/* the poster is the video's own first frame, so there's no jump
+              when playback starts */}
           <video
-            className="hero__water"
-            src="/hero/water.mp4"
-            autoPlay
+            className="hero__layer hero__video"
+            src="/hero/scene.mp4"
+            poster="/hero/poster.webp"
+            width="1920"
+            height="1080"
+            autoPlay={!reduceMotion}
             muted
             loop
             playsInline
             preload="auto"
             aria-hidden="true"
-            onCanPlayThrough={handleVideoReady}
+            onCanPlayThrough={onVideoReady}
             onError={onVideoReady}
           />
-          <picture>
-            <source srcSet="/hero/scene.avif" type="image/avif" />
-            <img
-              className="hero__layer hero__image"
-              src="/hero/scene.webp"
-              alt=""
-              width="1672"
-              height="941"
-              draggable="false"
-              fetchPriority="high"
-              onLoad={handleImageLoad}
-              onError={onImageReady}
-            />
-          </picture>
-          <DimensionLabels />
         </div>
 
         <div className="hero__shade" aria-hidden="true" />
@@ -84,6 +64,8 @@ function Hero({ onVideoReady, onImageReady }) {
           Scroll to explore
         </a>
 
+        <DimensionCarousel />
+
         <SectionDots />
         <FullscreenButton />
 
@@ -94,28 +76,76 @@ function Hero({ onVideoReady, onImageReady }) {
   )
 }
 
-function DimensionLabels() {
+/*
+ * One row of rectangular glass cards under the tree. Scrolls sideways (arrows, swipe or
+ * trackpad) with snap points; the arrows dim at either end.
+ */
+function DimensionCarousel() {
+  const trackRef = useRef(null)
+  const [edges, setEdges] = useState({ start: true, end: false })
+
+  const update = () => {
+    const el = trackRef.current
+    if (!el) return
+    setEdges({
+      start: el.scrollLeft <= 2,
+      end: el.scrollLeft + el.clientWidth >= el.scrollWidth - 2,
+    })
+  }
+
+  useEffect(() => {
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [])
+
+  const scrollByPage = (dir) => {
+    const el = trackRef.current
+    el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: 'smooth' })
+  }
+
   return (
-    <ul className="dimensions" aria-label="Dimensions of wellness">
-      {DIMENSIONS.map(({ name, icon: Icon, x, y }, i) => (
-        <li
-          key={name}
-          className="dimension"
-          style={{ left: `${x}%`, top: `${y}%`, '--i': i }}
-        >
-          <a href={`#${name.toLowerCase()}`} className="dimension__pill">
-            <span className="dimension__icon">
-              <Icon size={20} strokeWidth={1.5} aria-hidden="true" />
-            </span>
-            <span className="dimension__text">
-              {name}
-              <br />
-              Wellness
-            </span>
-          </a>
-        </li>
-      ))}
-    </ul>
+    <nav className="dimensions" aria-label="Dimensions of wellness">
+      <button
+        type="button"
+        className="dimensions__arrow"
+        onClick={() => scrollByPage(-1)}
+        disabled={edges.start}
+        aria-label="Previous dimensions"
+      >
+        <ChevronLeft size={20} strokeWidth={1.75} />
+      </button>
+
+      <ul
+        ref={trackRef}
+        className={`dimensions__track${edges.start ? ' at-start' : ''}${edges.end ? ' at-end' : ''}`}
+        onScroll={update}
+      >
+        {DIMENSIONS.map(({ name, icon: Icon }) => (
+          <li key={name} className="dimension">
+            <a href={`#${name.toLowerCase()}`} className="dimension__pill">
+              <span className="dimension__icon">
+                <Icon size={18} strokeWidth={1.5} aria-hidden="true" />
+              </span>
+              <span className="dimension__text">
+                <strong>{name}</strong>
+                Wellness
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <button
+        type="button"
+        className="dimensions__arrow"
+        onClick={() => scrollByPage(1)}
+        disabled={edges.end}
+        aria-label="Next dimensions"
+      >
+        <ChevronRight size={20} strokeWidth={1.75} />
+      </button>
+    </nav>
   )
 }
 

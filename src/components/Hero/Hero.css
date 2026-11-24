@@ -30,12 +30,12 @@
 /* =========================================================
    Scene
    A 16:9 box that always covers the hero. It is 12% larger than
-   needed and shifted so the tree (x ≈ 53% of the art) lands at
+   needed and shifted so the tree (x ≈ 62% of the art) lands at
    ~60% of the screen, leaving room for the headline on the left.
    ========================================================= */
 
 .hero__scene {
-  --tree-x: 0.53;      /* where the trunk sits in the artwork */
+  --tree-x: 0.62;      /* where the trunk sits in the artwork */
   --tree-target: 60cqw; /* where we want it on screen */
   --scene-scale: 1.12;
   --scene-w: calc(max(100cqw, 100cqh * 16 / 9) * var(--scene-scale));
@@ -62,37 +62,6 @@
   pointer-events: none;
 }
 
-/*
- * The water video is cropped to the scene's bottom strip (rows 474–720 of the
- * original 720px frame), so it sits from 65.83% down to the bottom.
- */
-.hero__water {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 34.17%;
-  object-fit: cover;
-  pointer-events: none;
-}
-
-/*
- * The cut (two masks, intersected) — transparent = the video shows through.
- * Only applied once the video can play (.hero__scene--water).
- *   1. linear  – image fully visible down to 76%, fades out by 84% → water
- *   2. ellipse – soft hole over the low mist bank on the left
- * The video's falling leaves stay above ~68%, so both holes keep them hidden.
- */
-.hero__scene--water .hero__image {
-  --cut-start: 76%;
-  --cut-end: 84%;
-  mask-image:
-    linear-gradient(to bottom, #000 var(--cut-start), transparent var(--cut-end)),
-    radial-gradient(ellipse 22% 7% at 24% 77%, transparent 35%, #000 100%);
-  mask-composite: intersect;
-}
-
 /* Readability gradients: darker on the left behind the text, and at the top behind the nav */
 .hero__shade {
   position: absolute;
@@ -104,55 +73,93 @@
 }
 
 /* =========================================================
-   Dimension labels
+   Dimension carousel — one row of glass pills under the tree
    ========================================================= */
 
 .dimensions {
   position: absolute;
-  inset: 0;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.dimension {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  animation: label-in 0.9s var(--ease-out) both;
-  animation-delay: calc(0.9s + var(--i) * 0.08s);
-}
-
-.dimension__pill {
+  z-index: 10;
+  /* from just right of the headline column to just left of the fullscreen button */
+  left: max(44%, calc(clamp(20px, 5.2vw, 88px) + min(560px, 38vw) + 40px));
+  right: calc(clamp(16px, 3.2vw, 56px) + 76px);
+  bottom: clamp(24px, 5vh, 48px);
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 8px 20px 8px 8px;
-  border-radius: 999px;
+  gap: 10px;
+  animation: fade-up 1s var(--ease-out) 1s both;
+}
+
+.dimensions__track {
+  display: flex;
+  flex: 1;
+  gap: 10px;
+  min-width: 0;
+  margin: 0;
+  padding: 6px 2px;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 2px;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  /* soft fade at whichever edge has more pills behind it */
+  --fade-l: 40px;
+  --fade-r: 40px;
+  mask-image: linear-gradient(90deg, transparent, #000 var(--fade-l), #000 calc(100% - var(--fade-r)), transparent);
+}
+
+.dimensions__track::-webkit-scrollbar { display: none; }
+.dimensions__track.at-start { --fade-l: 0px; }
+.dimensions__track.at-end { --fade-r: 0px; }
+
+.dimension {
+  flex: none;
+  scroll-snap-align: start;
+}
+
+/* rectangular glass card: icon on top, name below */
+.dimension__pill {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  width: 132px;
+  height: 108px;
+  padding: 12px 14px 12px;
+  border-radius: 14px;
   background: var(--glass-bg);
-  box-shadow: var(--glass-edge), var(--glass-glow);
+  box-shadow: var(--glass-edge);
   backdrop-filter: blur(12px) saturate(140%);
-  animation: label-float 6s ease-in-out infinite;
-  animation-delay: calc(var(--i) * -0.7s);
-  transition: background 0.35s ease, box-shadow 0.35s ease, transform 0.35s var(--ease-out);
+  transition: background 0.35s ease, box-shadow 0.35s ease;
 }
 
 .dimension__icon {
   display: grid;
   place-items: center;
   flex: none;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
   background: radial-gradient(circle at 35% 30%, rgb(130 184 230 / 0.5), rgb(25 75 120 / 0.5));
   box-shadow: inset 0 0 0 1px rgb(234 244 252 / 0.18);
   color: var(--color-cloud);
 }
 
 .dimension__text {
-  font-size: 0.95rem;
+  font-size: 0.78rem;
   font-weight: 500;
-  line-height: 1.25;
+  line-height: 1.3;
   white-space: nowrap;
+  color: rgb(234 244 252 / 0.75);
+}
+
+/* the dimension name stands out, "Wellness" sits quieter under it */
+.dimension__text strong {
+  display: block;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #fff;
 }
 
 .dimension__pill:hover,
@@ -160,9 +167,33 @@
   background: rgb(54 120 180 / 0.42);
   box-shadow:
     inset 0 0 0 1px rgb(234 244 252 / 0.4),
-    0 8px 32px rgb(7 21 48 / 0.45),
-    0 0 32px rgb(130 184 230 / 0.55);
-  animation-play-state: paused;
+    0 0 24px rgb(130 184 230 / 0.45);
+}
+
+.dimensions__arrow {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 108px;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  color: var(--color-cloud);
+  background: var(--glass-bg);
+  box-shadow: var(--glass-edge);
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  transition: background 0.3s ease, opacity 0.3s ease;
+}
+
+.dimensions__arrow:hover:not(:disabled) {
+  background: rgb(54 120 180 / 0.55);
+}
+
+.dimensions__arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
 }
 
 /* =========================================================
@@ -299,10 +330,6 @@
   background: linear-gradient(rgb(234 244 252 / 0.5), transparent);
 }
 
-.hero__scroll svg {
-  animation: nudge 2.4s ease-in-out infinite;
-}
-
 .hero__dots {
   position: absolute;
   z-index: 10;
@@ -367,27 +394,19 @@
    ========================================================= */
 
 /* Screens narrower than 16:9 (e.g. 16:10 laptops): push the tree further right
-   so the left-hand labels clear the headline */
+   so it clears the headline */
 @media (max-aspect-ratio: 17 / 10) {
   .hero__scene { --tree-target: 63cqw; }
 }
 
-/* Squarer screens (4:3, 3:2): don't enlarge the scene, so the right-hand
-   labels stay on screen; the section dots make way for them */
+/* Squarer screens (4:3, 3:2): don't enlarge the scene, and drop the
+   section dots */
 @media (max-aspect-ratio: 3 / 2) {
   .hero__scene { --scene-scale: 1; --tree-target: 62cqw; }
   .hero__dots { display: none; }
 }
 
-/* Mid-size screens: labels get smaller */
-@media (max-width: 1280px) {
-  .dimension__pill { gap: 8px; padding: 6px 14px 6px 6px; }
-  .dimension__icon { width: 34px; height: 34px; }
-  .dimension__icon svg { width: 16px; height: 16px; }
-  .dimension__text { font-size: 0.8rem; }
-}
-
-/* Tablets / phones: tree centered, labels hidden, copy at the bottom */
+/* Tablets / phones: tree centered, carousel hidden, copy at the bottom */
 @media (max-width: 900px), (max-aspect-ratio: 1 / 1) {
   .hero__scene { --tree-target: 50cqw; }
 
@@ -420,11 +439,6 @@
   .hero__controls { bottom: auto; top: 96px; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .hero__water { display: none; }
-  .hero__scene--water .hero__image { mask-image: none; }
-}
-
 /* =========================================================
    Keyframes
    ========================================================= */
@@ -434,17 +448,4 @@
   to   { opacity: 1; transform: none; }
 }
 
-@keyframes label-in {
-  from { opacity: 0; scale: 0.85; filter: blur(6px); }
-  to   { opacity: 1; scale: 1; filter: none; }
-}
 
-@keyframes label-float {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-6px); }
-}
-
-@keyframes nudge {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(4px); }
-}

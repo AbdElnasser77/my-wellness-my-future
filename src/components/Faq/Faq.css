@@ -1,0 +1,287 @@
+/* =========================================================
+   FAQs — photo fills the section behind a navy tint;
+   heading + contact on the left, frosted-glass accordion on the right
+   ========================================================= */
+
+.faq {
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  isolation: isolate;
+  color: #fff;
+  background: var(--color-deep);
+}
+
+.faq__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 55%;
+}
+
+/* darker on the left behind the heading, lighter on the right so the
+   people still show through the glass cards */
+.faq__tint {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(90deg, rgb(7 21 48 / 0.92) 0%, rgb(16 47 80 / 0.78) 45%, rgb(16 47 80 / 0.55) 100%),
+    linear-gradient(0deg, rgb(7 21 48 / 0.5), transparent 40%);
+}
+
+.faq__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.25fr);
+  align-items: start;
+  gap: clamp(40px, 7vw, 120px);
+  max-width: 1320px;
+  margin-inline: auto;
+  padding: clamp(80px, 13vh, 144px) clamp(20px, 4vw, 72px);
+}
+
+/* ---------- Intro ---------- */
+
+.faq__intro {
+  position: sticky;
+  top: 110px;
+}
+
+.faq__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 clamp(12px, 2vh, 20px);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-sky);
+}
+
+.faq__eyebrow span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-sky);
+}
+
+.faq__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 4vw, 4rem);
+  font-weight: 500;
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.faq__title em {
+  color: var(--color-sky);
+}
+
+.faq__contact {
+  margin-top: clamp(32px, 6vh, 56px);
+  padding-top: clamp(24px, 4vh, 32px);
+  border-top: 1px solid rgb(255 255 255 / 0.16);
+}
+
+.faq__contact-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2vw, 1.9rem);
+  font-weight: 500;
+}
+
+.faq__contact-text {
+  margin: 6px 0 20px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgb(234 244 252 / 0.72);
+}
+
+/* same single-pill style as the other buttons on the site */
+.faq__contact-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  height: 52px;
+  padding: 0 5px 0 24px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-deep);
+  background: #fff;
+  transition: background 0.3s ease;
+}
+
+.faq__contact-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--color-blue);
+}
+
+.faq__contact-icon svg {
+  transition: transform 0.35s var(--ease-out);
+}
+
+.faq__contact-button:hover {
+  background: var(--color-cloud);
+}
+
+.faq__contact-button:hover .faq__contact-icon svg {
+  transform: translateX(3px);
+}
+
+/* ---------- Accordion: frosted glass ---------- */
+
+.faq__list {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.faq__item {
+  border-radius: 20px;
+  background: rgb(255 255 255 / 0.07);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.14);
+  backdrop-filter: blur(14px) saturate(130%);
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+}
+
+.faq__item:hover {
+  background: rgb(255 255 255 / 0.1);
+}
+
+.faq__item.is-open {
+  background: rgb(255 255 255 / 0.14);
+  box-shadow:
+    inset 0 0 0 1px rgb(130 184 230 / 0.45),
+    0 20px 44px rgb(7 21 48 / 0.35);
+}
+
+.faq__q {
+  margin: 0;
+}
+
+.faq__q button {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 1.6vw, 20px);
+  width: 100%;
+  padding: clamp(18px, 2vw, 24px) clamp(18px, 2vw, 28px);
+  border: 0;
+  border-radius: 20px;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  background: none;
+  cursor: pointer;
+}
+
+.faq__q button:focus-visible {
+  outline: 2px solid var(--color-sky);
+  outline-offset: 2px;
+}
+
+.faq__num {
+  flex: none;
+  width: 1.4rem; /* fixed, so every question starts at the same x */
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+  color: rgb(130 184 230 / 0.7);
+  transition: color 0.3s ease;
+}
+
+.faq__item.is-open .faq__num {
+  color: var(--color-sky);
+}
+
+.faq__q-text {
+  flex: 1;
+  font-size: clamp(1rem, 1.25vw, 1.15rem);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.faq__toggle {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: #fff;
+  background: rgb(255 255 255 / 0.12);
+  transition: rotate 0.45s var(--ease-out), background 0.3s ease;
+}
+
+.faq__item.is-open .faq__toggle {
+  rotate: 45deg; /* + becomes × */
+  background: var(--color-blue);
+}
+
+/* smooth open/close: grid rows 0fr → 1fr animates to the content's height.
+   Same symmetric easing for opening and closing, so when you switch
+   questions the two cancel out and the cards below glide instead of jump. */
+.faq__a {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.faq__item.is-open .faq__a {
+  grid-template-rows: 1fr;
+}
+
+.faq__a-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.faq__a p {
+  margin: 0;
+  /* lines up with the question text, past the number */
+  padding: 0 clamp(18px, 2vw, 28px) clamp(20px, 2.2vw, 26px) calc(clamp(18px, 2vw, 28px) + 1.4rem + clamp(12px, 1.6vw, 20px));
+  font-size: 0.98rem;
+  line-height: 1.75;
+  color: rgb(234 244 252 / 0.8);
+  opacity: 0;
+  translate: 0 -6px;
+  transition: opacity 0.25s ease, translate 0.45s var(--ease-out);
+}
+
+.faq__item.is-open .faq__a p {
+  opacity: 1;
+  translate: none;
+  transition: opacity 0.45s ease 0.2s, translate 0.6s var(--ease-out) 0.15s;
+}
+
+/* ---------- Responsive ---------- */
+
+/* stack: heading, questions, then the contact prompt last */
+@media (max-width: 900px) {
+  .faq__inner { grid-template-columns: 1fr; gap: 0; }
+  .faq__intro { display: contents; }
+  .faq__list { margin-top: 32px; }
+  .faq__contact { order: 1; }
+  .faq__tint {
+    background: linear-gradient(180deg, rgb(7 21 48 / 0.88), rgb(16 47 80 / 0.78));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq__a,
+  .faq__a p,
+  .faq__toggle { transition: none; }
+}
