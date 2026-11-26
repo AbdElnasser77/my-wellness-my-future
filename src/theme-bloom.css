@@ -1,0 +1,108 @@
+/* =========================================================
+   Bloom theme — dark forest sections (gradients or nature photos),
+   light text and glass surfaces. Imported last in App.jsx so it
+   overrides the per-section light styles.
+   ========================================================= */
+
+/*
+ * Not every section has a photo: Services and Membership use soft
+ * green gradients; Testimonials and FAQ keep nature photos.
+ * Every section starts and ends in the page colour (--night), so they melt
+ * into each other instead of meeting at a hard edge.
+ */
+
+.services,
+.voices,
+.plans {
+  color: var(--color-cloud);
+  background-color: rgb(var(--night));
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  box-shadow: none;
+}
+
+/* gradient sections — each with its own glow, so the page shifts gently */
+.services {
+  background-image:
+    radial-gradient(ellipse 60% 40% at 15% 10%, rgb(96 150 72 / 0.2), transparent 70%),
+    radial-gradient(ellipse 50% 45% at 90% 75%, rgb(40 90 60 / 0.3), transparent 70%),
+    rgb(var(--night));
+}
+
+.plans {
+  background-image:
+    radial-gradient(ellipse 50% 35% at 50% 0%, rgb(196 228 150 / 0.14), transparent 70%),
+    radial-gradient(ellipse 40% 50% at 100% 100%, rgb(96 150 72 / 0.16), transparent 70%),
+    rgb(var(--night));
+}
+
+/* photo sections — the tint is solid page colour at both edges */
+.voices {
+  background-image:
+    linear-gradient(180deg, rgb(var(--night)) 0%, rgb(var(--night) / 0.72) 22%, rgb(var(--night) / 0.62) 55%, rgb(var(--night) / 0.8) 85%, rgb(var(--night)) 100%),
+    url('/nature/forest-rays.webp');
+  background-size: 100% 100%, cover;
+}
+
+
+/* ---------- headings & body text on the dark backdrops ---------- */
+
+.services__title,
+.voices__title,
+.plans__title { color: #fff; }
+
+.services__eyebrow,
+.voices__eyebrow { color: var(--color-sky); }
+
+.voices__lead { color: rgb(236 244 230 / 0.78); }
+
+/* ---------- Services ---------- */
+
+.services__all {
+  border-color: rgb(236 244 230 / 0.3);
+  color: #fff;
+}
+
+.services__all:hover {
+  border-color: #fff;
+  color: #0b140e;
+  background: #fff;
+}
+
+.services__card {
+  box-shadow: inset 0 0 0 1px rgb(196 228 150 / 0.2), 0 24px 50px rgb(0 0 0 / 0.35);
+}
+
+/* ---------- Testimonials ---------- */
+
+/* the cut-out review photo needs a backdrop: soft green glass */
+.voices__card:not(.voices__card--video) {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 30%, rgb(196 228 150 / 0.35), transparent 70%),
+    linear-gradient(180deg, #2c4a2f, #142418);
+}
+
+.voices__card {
+  box-shadow: inset 0 0 0 1px rgb(196 228 150 / 0.2), 0 24px 50px rgb(0 0 0 / 0.35);
+}
+
+/* ---------- Membership ---------- */
+
+.plans__card {
+  background: rgb(255 255 255 / 0.06);
+  backdrop-filter: blur(14px);
+}
+
+.plans__card--featured {
+  background: linear-gradient(180deg, #f4f9ee, #dcebcd);
+}
+
+/* ---------- FAQ: same tint family ---------- */
+
+.faq__tint {
+  background:
+    linear-gradient(180deg, rgb(var(--night)) 0%, transparent 18%, transparent 82%, rgb(var(--night)) 100%),
+    linear-gradient(90deg, rgb(6 12 8 / 0.94) 0%, rgb(8 18 11 / 0.82) 45%, rgb(8 18 11 / 0.62) 100%);
+}
+

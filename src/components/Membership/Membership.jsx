@@ -1,38 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowRight, Check, ShieldCheck } from 'lucide-react'
 import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { ArrowRight, Check, ShieldCheck } from 'lucide-react'
 import { PLANS } from './membershipContent.js'
 import './Membership.css'
-
-gsap.registerPlugin(ScrollTrigger)
 
 /*
  * Membership / subscription plans — dark section with three plan cards
  * (Premium highlighted) and a monthly / yearly billing switch.
  */
 function Membership() {
-  const ref = useRef(null)
   const [billing, setBilling] = useState('monthly')
 
-  useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const ctx = gsap.context(() => {
-      gsap.from('[data-reveal]', {
-        y: 40,
-        opacity: 0,
-        duration: 1,
-        ease: 'power3.out',
-        stagger: 0.1,
-        clearProps: 'transform,opacity',
-        scrollTrigger: { trigger: ref.current, start: 'top 70%', once: true },
-      })
-    }, ref)
-    return () => ctx.revert()
-  }, [])
 
   return (
-    <section className="plans" id="membership" ref={ref} aria-labelledby="plans-title">
+    <section className="plans" id="membership" aria-labelledby="plans-title">
       <div className="plans__inner">
         <header className="plans__head">
           <p className="plans__eyebrow" data-reveal>
@@ -75,13 +56,13 @@ function Membership() {
                 <p className="plans__ideal">Ideal for: {plan.idealFor}</p>
 
                 {/* key change re-runs the little fade when the billing period switches */}
-                <p className="plans__price" key={billing}>
+                <p className="plans__price">
                   {price === 0 ? (
                     <span className="plans__amount">Free</span>
                   ) : (
                     <>
-                      <span className="plans__amount">{price.toLocaleString('en-US')}</span>
-                      <span className="plans__currency">
+                      <AnimatedPrice value={price} longest={Math.max(plan.monthly, plan.yearly)} />
+                      <span className="plans__currency" key={billing}>
                         AED / {billing === 'monthly' ? 'month' : 'year'}
                       </span>
                     </>
@@ -117,6 +98,57 @@ function Membership() {
         </div>
       </div>
     </section>
+  )
+}
+
+/*
+ * Price that counts to its new value when the billing period changes.
+ * Digits are tabular and the box reserves room for the longest price, so
+ * nothing around it moves while it counts.
+ */
+// room for the longest price: tabular digits ≈ 0.6em, a comma ≈ 0.25em
+const priceWidth = (n) => {
+  const s = n.toLocaleString('en-US')
+  const commas = (s.match(/,/g) || []).length
+  return `${(s.length - commas) * 0.6 + commas * 0.25}em`
+}
+
+function AnimatedPrice({ value, longest }) {
+  const ref = useRef(null)
+  const shown = useRef(value)
+
+  useEffect(() => {
+    const el = ref.current
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const state = { n: shown.current }
+    const tween = gsap.to(state, {
+      n: value,
+      duration: reduce ? 0 : 0.9,
+      ease: 'power3.out',
+      onUpdate: () => {
+        el.textContent = Math.round(state.n).toLocaleString('en-US')
+      },
+      onComplete: () => {
+        shown.current = value
+      },
+    })
+    if (!reduce && value !== shown.current) {
+      gsap.fromTo(el, { yPercent: 12, opacity: 0.4 }, { yPercent: 0, opacity: 1, duration: 0.6, ease: 'power3.out' })
+    }
+    return () => {
+      tween.kill()
+      shown.current = value
+    }
+  }, [value])
+
+  return (
+    <span
+      className="plans__amount plans__amount--num"
+      ref={ref}
+      style={{ minWidth: priceWidth(longest) }}
+    >
+      {value.toLocaleString('en-US')}
+    </span>
   )
 }
 

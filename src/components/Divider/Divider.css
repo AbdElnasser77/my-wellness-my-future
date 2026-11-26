@@ -1,0 +1,40 @@
+.divider {
+  position: relative;
+  z-index: 4; /* above the sections on either side */
+  height: 0;
+  pointer-events: none;
+}
+
+.divider__line {
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(196 228 150 / 0.35) 25%,
+    rgb(233 245 154 / 0.7) 50%,
+    rgb(196 228 150 / 0.35) 75%,
+    transparent
+  );
+  box-shadow: 0 0 12px rgb(196 228 150 / 0.25);
+}
+
+/* small diamond with a soft ring, centred on the line */
+.divider__mark {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 9px;
+  height: 9px;
+  background: #e9f59a;
+  box-shadow:
+    0 0 0 5px rgb(var(--night)),
+    0 0 0 6px rgb(196 228 150 / 0.4),
+    0 0 16px rgb(233 245 154 / 0.6);
+  /* individual properties, so GSAP's scale (transform) can't disturb them */
+  translate: -50% -50%;
+  rotate: 45deg;
+}

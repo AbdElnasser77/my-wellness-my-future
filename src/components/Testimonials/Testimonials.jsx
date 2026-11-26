@@ -1,12 +1,7 @@
-import { useEffect, useRef } from 'react'
 import { Quote } from 'lucide-react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { TESTIMONIALS } from './testimonialsContent.js'
 import VideoCard from './VideoCard.jsx'
 import './Testimonials.css'
-
-gsap.registerPlugin(ScrollTrigger)
 
 /*
  * "Voices of Transformation" — centered heading and a row of tall cards.
@@ -15,26 +10,8 @@ gsap.registerPlugin(ScrollTrigger)
  * inside the card).
  */
 function Testimonials() {
-  const ref = useRef(null)
-
-  useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const ctx = gsap.context(() => {
-      gsap.from('[data-reveal]', {
-        y: 30,
-        opacity: 0,
-        duration: 0.9,
-        ease: 'power3.out',
-        stagger: 0.15,
-        clearProps: 'transform,opacity',
-        scrollTrigger: { trigger: ref.current, start: 'top 70%', once: true },
-      })
-    }, ref)
-    return () => ctx.revert()
-  }, [])
-
-  return (
-    <section className="voices" id="testimonials" ref={ref} aria-labelledby="voices-title">
+    return (
+    <section className="voices" id="testimonials" aria-labelledby="voices-title">
       <div className="voices__inner">
         <header className="voices__head">
           <p className="voices__eyebrow" data-reveal>

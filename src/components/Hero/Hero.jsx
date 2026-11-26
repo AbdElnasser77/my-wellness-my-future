@@ -1,17 +1,29 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowDown, ChevronLeft, ChevronRight, Maximize, Minimize, Mouse } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { DIMENSIONS } from './dimensions.js'
 import './Hero.css'
 
 /*
  * Everything sits in .hero__stage, which the scroll transition scales
- * and darkens as section 2 slides over (see hooks/useHeroTransition).
+ * and darkens as section 2 slides over (see motion/hero.js).
  *
  * Layer stack (back → front):
  *   scene   – 16:9 box holding the background video
  *   shade   – gradients that keep the text readable
  *   content – headline, copy, buttons and small controls
  */
+// firefly positions (% of the hero), drift duration, delay and size
+const FIREFLIES = [
+  { x: 14, y: 62, d: 9, delay: 0, s: 1 },
+  { x: 22, y: 38, d: 11, delay: -3, s: 0.7 },
+  { x: 31, y: 70, d: 10, delay: -6, s: 0.8 },
+  { x: 68, y: 58, d: 12, delay: -2, s: 1 },
+  { x: 76, y: 34, d: 9.5, delay: -5, s: 0.6 },
+  { x: 84, y: 66, d: 11.5, delay: -1, s: 0.9 },
+  { x: 58, y: 24, d: 13, delay: -7, s: 0.6 },
+  { x: 42, y: 78, d: 10.5, delay: -4, s: 0.7 },
+]
+
 function Hero({ onVideoReady }) {
   // people who ask for reduced motion get the still first frame
   const reduceMotion =
@@ -43,31 +55,39 @@ function Hero({ onVideoReady }) {
 
         <div className="hero__shade" aria-hidden="true" />
 
+        {/* atmosphere: two slow mist layers and a few fireflies (decorative,
+            transform-only, paused while the hero is off screen) */}
+        <div className="hero__atmos" aria-hidden="true">
+          <span className="hero__mist hero__mist--back" />
+          <span className="hero__mist hero__mist--front" />
+          {FIREFLIES.map((f, i) => (
+            <span
+              key={i}
+              className="hero__firefly"
+              style={{ left: `${f.x}%`, top: `${f.y}%`, '--d': `${f.d}s`, '--delay': `${f.delay}s`, '--s': f.s }}
+            />
+          ))}
+        </div>
+
         <div className="hero__content">
-          <p className="hero__eyebrow">A new perspective on wellness</p>
           <h1 className="hero__title">
-            <span>Wellness is not</span>
-            <span>a destination.</span>
-            <em>It’s a way of living.</em>
+            Wellness is not a destination.
+            <span className="hero__gradient">It&rsquo;s a way of living.</span>
           </h1>
           <p className="hero__lead">
             Discover the dimensions of a healthier, more balanced and meaningful life.
           </p>
-          <a href="#dimensions" className="hero__button">
-            Explore the Tree
-            <ArrowDown size={18} strokeWidth={1.75} aria-hidden="true" />
-          </a>
+          <div className="hero__actions">
+            <a href="#about" className="hero__button hero__button--light">
+              Explore the journey
+            </a>
+            <a href="#contact" className="hero__button hero__button--glass">
+              Join us
+            </a>
+          </div>
         </div>
 
-        <a href="#about" className="hero__scroll">
-          <Mouse size={26} strokeWidth={1.25} aria-hidden="true" />
-          Scroll to explore
-        </a>
-
         <DimensionCarousel />
-
-        <SectionDots />
-        <FullscreenButton />
 
         {/* darkens the hero during the transition into section 2 */}
         <div className="hero__dim" aria-hidden="true" />
@@ -149,51 +169,6 @@ function DimensionCarousel() {
   )
 }
 
-function SectionDots() {
-  const sections = ['Home', 'The Philosophy', 'Dimensions', 'Programs']
-  return (
-    <nav className="hero__dots" aria-label="Page sections">
-      {sections.map((label, i) => (
-        <a
-          key={label}
-          href={i === 0 ? '#home' : `#${label.toLowerCase().replace('the ', '')}`}
-          className="hero__dot"
-          aria-label={label}
-          aria-current={i === 0 ? 'true' : undefined}
-        />
-      ))}
-    </nav>
-  )
-}
 
-function FullscreenButton() {
-  const [isFull, setIsFull] = useState(false)
-
-  useEffect(() => {
-    const onChange = () => setIsFull(Boolean(document.fullscreenElement))
-    document.addEventListener('fullscreenchange', onChange)
-    return () => document.removeEventListener('fullscreenchange', onChange)
-  }, [])
-
-  if (!document.fullscreenEnabled) return null
-
-  const toggle = () =>
-    document.fullscreenElement
-      ? document.exitFullscreen()
-      : document.documentElement.requestFullscreen()
-
-  return (
-    <div className="hero__controls">
-      <button
-        type="button"
-        className="hero__control"
-        onClick={toggle}
-        aria-label={isFull ? 'Exit fullscreen' : 'Enter fullscreen'}
-      >
-        {isFull ? <Minimize size={20} strokeWidth={1.5} /> : <Maximize size={20} strokeWidth={1.5} />}
-      </button>
-    </div>
-  )
-}
 
 export default Hero

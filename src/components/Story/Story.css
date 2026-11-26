@@ -1,0 +1,177 @@
+/* =========================================================
+   Story — forest video, centred steps, 01–04 scroll bar
+   ========================================================= */
+
+.story {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: hidden;
+  color: #fff;
+  background: rgb(var(--night));
+}
+
+.story__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 40%;
+}
+
+/* gradient: fades into the page at the top and bottom, a soft dark pool
+   behind the text so it reads over the light rays */
+.story__shade {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 42% 30% at 50% 50%, rgb(6 12 8 / 0.5), transparent 75%),
+    linear-gradient(180deg, rgb(var(--night)) 0%, rgb(var(--night) / 0.25) 18%, rgb(var(--night) / 0.15) 60%, rgb(var(--night) / 0.85) 92%, rgb(var(--night)) 100%),
+    rgb(6 12 8 / 0.15);
+}
+
+/* ---------- steps: default = stacked, scrolling normally ---------- */
+
+.story__steps {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 40vh;
+  justify-items: center;
+  padding: 40vh 24px;
+}
+
+.story__step {
+  max-width: 600px;
+  text-align: center;
+}
+
+.story__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 14px;
+  font-size: clamp(1.35rem, 2vw, 1.75rem);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  text-shadow: 0 2px 20px rgb(6 12 8 / 0.6);
+}
+
+.story__title svg {
+  flex: none;
+  color: rgb(236 244 230 / 0.85);
+}
+
+.story__text {
+  margin: 0;
+  font-size: clamp(1.02rem, 1.3vw, 1.25rem);
+  line-height: 1.55;
+  color: rgb(236 244 230 / 0.9);
+  text-shadow: 0 2px 18px rgb(6 12 8 / 0.7);
+  text-wrap: balance;
+}
+
+/* ---------- pinned (desktop): one step at a time ---------- */
+
+.story--pinned {
+  height: 100vh;
+  height: 100svh;
+}
+
+.story--pinned .story__steps {
+  position: absolute;
+  inset: 0;
+  display: block;
+  padding: 0;
+}
+
+.story--pinned .story__step {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(600px, calc(100% - 48px));
+  translate: -50% -50%;
+}
+
+/* ---------- scroll bar ---------- */
+
+.story__nav {
+  display: none;
+}
+
+.story--pinned .story__nav {
+  position: absolute;
+  z-index: 2;
+  right: clamp(24px, 3vw, 48px);
+  top: 50%;
+  display: block;
+  padding-right: 18px;
+  translate: 0 -50%;
+}
+
+.story__list {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.story__nav-item {
+  position: relative;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: rgb(236 244 230 / 0.45);
+  transition: color 0.4s ease;
+}
+
+/* a short dash leads the active number */
+.story__nav-item::before {
+  content: '';
+  position: absolute;
+  right: calc(100% + 8px);
+  top: 50%;
+  width: 0;
+  height: 1px;
+  background: rgb(236 244 230 / 0.7);
+  transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.story__nav-item.is-active {
+  color: #fff;
+}
+
+.story__nav-item.is-active::before {
+  width: 14px;
+}
+
+.story__track {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 2px;
+  border-radius: 2px;
+  background: rgb(236 244 230 / 0.2);
+}
+
+.story__thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 25%;
+  border-radius: 2px;
+  background: #fff;
+  box-shadow: 0 0 10px rgb(255 255 255 / 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story__video { display: none; }
+  .story { background: url('/story/forest-poster.webp') center / cover; }
+}

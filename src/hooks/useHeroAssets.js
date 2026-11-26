@@ -24,9 +24,8 @@ export default function useHeroAssets() {
 
     // 1. The fonts used above the fold
     Promise.all([
-      document.fonts.load('500 1em "Cormorant Garamond"'),
-      document.fonts.load('italic 500 1em "Cormorant Garamond"'),
       document.fonts.load('400 1em "Manrope Variable"'),
+      document.fonts.load('500 1em "Manrope Variable"'),
     ]).then(finish('fonts'), finish('fonts'))
 
     // 2. The video reports itself (see Hero)

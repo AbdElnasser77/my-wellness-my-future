@@ -9,8 +9,8 @@
   overflow: hidden;
   color: var(--color-cloud);
   background:
-    radial-gradient(ellipse 60% 45% at 50% 0%, rgb(54 120 180 / 0.35), transparent 70%),
-    radial-gradient(ellipse 40% 40% at 100% 100%, rgb(130 184 230 / 0.12), transparent 70%),
+    radial-gradient(ellipse 60% 45% at 50% 0%, rgb(96 150 72 / 0.35), transparent 70%),
+    radial-gradient(ellipse 40% 40% at 100% 100%, rgb(196 228 150 / 0.12), transparent 70%),
     linear-gradient(180deg, var(--color-deep), var(--color-night));
 }
 
@@ -69,7 +69,7 @@
   font-size: clamp(1rem, 1.15vw, 1.1rem);
   line-height: 1.7;
   text-wrap: balance;
-  color: rgb(234 244 252 / 0.72);
+  color: rgb(236 244 230 / 0.72);
 }
 
 /* ---------- Monthly / yearly switch ---------- */
@@ -91,8 +91,14 @@
   width: calc(50% - 5px);
   border-radius: 999px;
   background: var(--color-blue);
-  box-shadow: 0 8px 20px rgb(54 120 180 / 0.4);
-  transition: translate 0.45s var(--ease-out);
+  box-shadow: 0 8px 20px rgb(96 150 72 / 0.4);
+  /* physical feel: quick start, soft landing with a hint of overshoot */
+  transition: translate 0.55s cubic-bezier(0.34, 1.32, 0.64, 1), scale 0.2s ease;
+}
+
+/* the thumb squashes slightly while pressed */
+.plans__switch:active .plans__switch-thumb {
+  scale: 0.96 0.92;
 }
 
 .plans__switch-thumb[data-billing='yearly'] {
@@ -108,7 +114,7 @@
   border-radius: 999px;
   font-size: 0.92rem;
   font-weight: 600;
-  color: rgb(234 244 252 / 0.7);
+  color: rgb(236 244 230 / 0.7);
   background: none;
   cursor: pointer;
   transition: color 0.3s ease;
@@ -141,7 +147,7 @@
 
 .plans__card:hover {
   translate: 0 -6px;
-  border-color: rgb(130 184 230 / 0.4);
+  border-color: rgb(196 228 150 / 0.4);
 }
 
 /* Premium: light card, a little taller */
@@ -150,7 +156,7 @@
   color: var(--color-deep);
   border-color: transparent;
   background: linear-gradient(180deg, #fff, var(--color-cloud));
-  box-shadow: 0 30px 70px rgb(0 0 0 / 0.35), 0 0 0 1px rgb(130 184 230 / 0.4);
+  box-shadow: 0 30px 70px rgb(0 0 0 / 0.35), 0 0 0 1px rgb(196 228 150 / 0.4);
 }
 
 .plans__card--featured:hover {
@@ -168,11 +174,11 @@
 .plans__ideal {
   margin: 8px 0 0;
   font-size: 0.9rem;
-  color: rgb(234 244 252 / 0.65);
+  color: rgb(236 244 230 / 0.65);
 }
 
 .plans__card--featured .plans__ideal {
-  color: rgb(16 47 80 / 0.65);
+  color: rgb(14 30 20 / 0.65);
 }
 
 .plans__price {
@@ -182,15 +188,23 @@
   margin: clamp(22px, 3vh, 32px) 0 clamp(20px, 3vh, 28px);
   padding-top: clamp(20px, 3vh, 28px);
   border-top: 1px solid rgb(255 255 255 / 0.12);
-  animation: plans-price 0.5s var(--ease-out);
 }
 
 .plans__card--featured .plans__price {
-  border-top-color: rgb(16 47 80 / 0.12);
+  border-top-color: rgb(14 30 20 / 0.12);
 }
 
 @keyframes plans-price {
   from { opacity: 0; translate: 0 8px; }
+}
+
+.plans__amount--num {
+  display: inline-block;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.plans__currency {
+  animation: plans-price 0.5s var(--ease-out);
 }
 
 .plans__amount {
@@ -199,7 +213,6 @@
   font-weight: 500;
   line-height: 1;
   letter-spacing: -0.02em;
-  /* Cormorant's default old-style figures make "100" read like "IOO" */
   font-variant-numeric: lining-nums;
 }
 
@@ -250,7 +263,7 @@
 .plans__card--featured .plans__cta {
   border-color: transparent;
   background: var(--color-blue);
-  box-shadow: 0 10px 24px rgb(54 120 180 / 0.3);
+  box-shadow: 0 10px 24px rgb(96 150 72 / 0.3);
 }
 
 .plans__card--featured .plans__cta:hover {
@@ -305,7 +318,7 @@
   margin-top: 1px;
   border-radius: 50%;
   color: var(--color-sky);
-  background: rgb(130 184 230 / 0.16);
+  background: rgb(196 228 150 / 0.16);
 }
 
 .plans__card--featured .plans__check {

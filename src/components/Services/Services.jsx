@@ -1,11 +1,6 @@
-import { useEffect, useRef } from 'react'
 import { ArrowRight, ArrowUpRight } from 'lucide-react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SERVICES } from './servicesContent.js'
 import './Services.css'
-
-gsap.registerPlugin(ScrollTrigger)
 
 /*
  * "Programs & Services" — 12-column grid with alternating 5/7 and 7/5 card
@@ -13,38 +8,8 @@ gsap.registerPlugin(ScrollTrigger)
  * a panel slides up from the bottom with the icon, title and description.
  */
 function Services() {
-  const ref = useRef(null)
-
-  useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const ctx = gsap.context(() => {
-      gsap.from('[data-reveal]', {
-        y: 40,
-        opacity: 0,
-        duration: 1,
-        ease: 'power3.out',
-        stagger: 0.08,
-        clearProps: 'transform,opacity',
-        scrollTrigger: { trigger: '.services__head', start: 'top 80%', once: true },
-      })
-
-      // each card rises in as it enters the viewport
-      gsap.utils.toArray('.services__card').forEach((card) => {
-        gsap.from(card, {
-          y: 50,
-          opacity: 0,
-          duration: 0.9,
-          ease: 'power3.out',
-          clearProps: 'transform,opacity',
-          scrollTrigger: { trigger: card, start: 'top 88%', once: true },
-        })
-      })
-    }, ref)
-    return () => ctx.revert()
-  }, [])
-
-  return (
-    <section className="services" id="services" ref={ref} aria-labelledby="services-title">
+    return (
+    <section className="services" id="services" aria-labelledby="services-title">
       <div className="services__inner">
         <header className="services__head">
           <div>

@@ -6,7 +6,7 @@
   position: relative;
   z-index: 2;
   color: var(--color-deep);
-  background: linear-gradient(180deg, #f7fbff, var(--color-cloud));
+  background: linear-gradient(180deg, #0b140e, var(--color-cloud));
 }
 
 .voices__inner {
@@ -61,7 +61,7 @@
   font-size: clamp(1rem, 1.15vw, 1.1rem);
   line-height: 1.7;
   text-wrap: balance;
-  color: rgb(16 47 80 / 0.72);
+  color: rgb(14 30 20 / 0.72);
 }
 
 /* ---------- Cards ---------- */
@@ -99,16 +99,16 @@
   color: #fff;
   /* the review photo is a cut-out, so this gradient becomes its backdrop */
   background:
-    radial-gradient(ellipse 80% 60% at 50% 30%, rgb(234 244 252 / 0.9), transparent 70%),
+    radial-gradient(ellipse 80% 60% at 50% 30%, rgb(236 244 230 / 0.9), transparent 70%),
     linear-gradient(180deg, var(--color-cloud), var(--color-sky));
-  box-shadow: 0 18px 40px rgb(16 47 80 / 0.12);
+  box-shadow: 0 18px 40px rgb(14 30 20 / 0.12);
   /* `translate` so hover never fights the GSAP reveal (transform) */
   transition: translate 0.45s var(--ease-out), box-shadow 0.45s ease;
 }
 
 .voices__card:hover {
   translate: 0 -6px;
-  box-shadow: 0 26px 50px rgb(16 47 80 / 0.18);
+  box-shadow: 0 26px 50px rgb(14 30 20 / 0.18);
 }
 
 .voices__photo {
@@ -119,11 +119,12 @@
   height: 100%;
   object-fit: cover;
   object-position: 50% 0%;
-  transition: transform 1.1s var(--ease-out);
+  /* `scale` (not transform) so the hover zoom never fights GSAP */
+  transition: scale 1.1s var(--ease-out);
 }
 
 .voices__card:hover .voices__photo {
-  transform: scale(1.04);
+  scale: 1.04;
 }
 
 /* dark fade at the bottom so the quote reads */
@@ -134,11 +135,11 @@
   /* eased stops so the fade has no visible edge */
   background: linear-gradient(
     to top,
-    rgb(7 21 48 / 0.92) 0%,
-    rgb(10 32 62 / 0.8) 22%,
-    rgb(16 47 80 / 0.55) 40%,
-    rgb(16 47 80 / 0.28) 55%,
-    rgb(16 47 80 / 0.1) 68%,
+    rgb(6 12 8 / 0.92) 0%,
+    rgb(10 22 14 / 0.8) 22%,
+    rgb(14 30 20 / 0.55) 40%,
+    rgb(14 30 20 / 0.28) 55%,
+    rgb(14 30 20 / 0.1) 68%,
     transparent 80%
   );
 }
@@ -183,10 +184,10 @@
 .voices__card--video .voices__shade {
   background: linear-gradient(
     to top,
-    rgb(7 21 48 / 0.97) 0%,
-    rgb(7 21 48 / 0.93) 38%,
-    rgb(10 32 62 / 0.7) 52%,
-    rgb(16 47 80 / 0.3) 64%,
+    rgb(6 12 8 / 0.97) 0%,
+    rgb(6 12 8 / 0.93) 38%,
+    rgb(10 22 14 / 0.7) 52%,
+    rgb(14 30 20 / 0.3) 64%,
     transparent 78%
   );
 }
@@ -222,7 +223,7 @@
   border-radius: 50%;
   color: #fff;
   background: rgb(255 255 255 / 0.16);
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.45), 0 12px 30px rgb(7 21 48 / 0.35);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.45), 0 12px 30px rgb(6 12 8 / 0.35);
   backdrop-filter: blur(10px);
   transition:
     background 0.4s ease,
@@ -234,7 +235,7 @@
 .voices__play:focus-visible .voices__play-icon {
   scale: 1.12;
   background: var(--color-blue);
-  box-shadow: 0 0 0 12px rgb(54 120 180 / 0.25), 0 16px 36px rgb(7 21 48 / 0.45);
+  box-shadow: 0 0 0 12px rgb(96 150 72 / 0.25), 0 16px 36px rgb(6 12 8 / 0.45);
 }
 
 /* excerpt: clamped with a soft fade, expands smoothly */
@@ -284,7 +285,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgb(7 21 48 / 0.6) 40%, rgb(7 21 48 / 0.25) 75%, transparent);
+  background: linear-gradient(to top, rgb(6 12 8 / 0.6) 40%, rgb(6 12 8 / 0.25) 75%, transparent);
   opacity: 0;
   transition: opacity 0.5s ease;
 }
@@ -364,8 +365,8 @@
   z-index: 1;
   pointer-events: none;
 }
-.voices__stage::before { top: 0; height: 90px; background: linear-gradient(rgb(7 21 48 / 0.45), transparent); }
-.voices__stage::after { bottom: 0; height: 60px; background: linear-gradient(transparent, rgb(7 21 48 / 0.35)); }
+.voices__stage::before { top: 0; height: 90px; background: linear-gradient(rgb(6 12 8 / 0.45), transparent); }
+.voices__stage::after { bottom: 0; height: 60px; background: linear-gradient(transparent, rgb(6 12 8 / 0.35)); }
 
 /* click anywhere on the video to pause / resume */
 .voices__toggle {
@@ -387,7 +388,7 @@
   height: 72px;
   border-radius: 50%;
   color: #fff;
-  background: rgb(7 21 48 / 0.45);
+  background: rgb(6 12 8 / 0.45);
   backdrop-filter: blur(8px);
   opacity: 0;
   scale: 0.8;
@@ -461,7 +462,7 @@
   border: 1px solid rgb(255 255 255 / 0.3);
   border-radius: 50%;
   color: #fff;
-  background: rgb(7 21 48 / 0.45);
+  background: rgb(6 12 8 / 0.45);
   backdrop-filter: blur(8px);
   cursor: pointer;
   animation: voices-pop 0.4s var(--ease-out) 0.2s both;
